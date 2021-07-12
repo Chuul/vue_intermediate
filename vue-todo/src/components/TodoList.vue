@@ -1,12 +1,30 @@
 <template>
-  <div>
-      list
-  </div>
+  <ul>
+      <li v-for="todoItem in todoItems" v-bind:key="todoItem">
+          {{ todoItem }}
+          <span class="removeBtn">
+              <i class="far fa-trash-alt"></i>
+          </span>
+      </li>
+  </ul>
 </template>
 
 <script>
 export default {
-
+    data : function(){
+        return {
+            todoItems : []
+        }
+    },
+    created : function(){
+        if(localStorage.length > 0){
+            for(let i = 0 ; i < localStorage.length ; i++){
+                if(localStorage.key(i) !== 'loglevel:webpack-dev-server'){
+                    this.todoItems.push(localStorage.key(i));
+                }
+            }
+        }
+    }
 }
 </script>
 

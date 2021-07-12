@@ -1,12 +1,28 @@
 <template>
-  <div>
-      input
+  <div class="inputBox">
+      <input type="text" v-model="newTodo" v-on:keyup.enter="addTodo">
+      <span class="addContainer" v-on:click="addTodo">
+        <i class="addBtn fas fa-plus"></i>
+      </span>
   </div>
 </template>
 
 <script>
 export default {
-
+  data : function(){
+    return {
+      newTodo : ""
+    }
+  },
+  methods : {
+    addTodo : function(){
+      localStorage.setItem(this.newTodo, this.newTodo)
+      this.clearText();
+    },
+    clearText : function(){
+      this.newTodo = ""
+    }
+  }
 }
 </script>
 
