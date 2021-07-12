@@ -1,12 +1,16 @@
 <template>
-  <div>
-      footer
+  <div class="clearAllContainer">
+      <span class="clearAllBtn" v-on:click="clearTodo">CLEAR ALL</span>
   </div>
 </template>
 
 <script>
 export default {
-
+    methods : {
+        clearTodo : function(){
+            localStorage.clear();
+        }
+    }
 }
 </script>
 
