@@ -1,24 +1,25 @@
 <template>
-  <transition-group name="list" tag="ul">
-      <li v-for="(todoItem,index) in propsdata" v-bind:key="todoItem" class="shadow">
-        <i class="checkBtn fas fa-check" v-on:click="checkTodo(todoItem,index)" v-bind:class="{checkBtnCompleted : todoItem.completed}"></i>
-        <span v-bind:class="{textCompleted : todoItem.completed}">{{ todoItem.item }}</span>
-        <span class="removeBtn" v-on:click="removeTodo(todoItem,index)">
-          <i class="far fa-trash-alt"></i>
-        </span>
-      </li>
+  <transition-group name="list" tag="p">
+    <li v-for="(todoItem,index) in this.$store.state.todoItems" v-bind:key="todoItem.item">
+    <i class="checkBtn fas fa-check" v-on:click="checkTodo(todoItem,index)" v-bind:class="{checkBtnCompleted : todoItem.completed}"></i>
+    <span v-bind:class="{textCompleted : todoItem.completed}">{{ todoItem.item }}</span>
+    <span class="removeBtn" v-on:click="removeTodo(todoItem,index)">
+        <i class="far fa-trash-alt"></i>
+    </span>
+    </li>
   </transition-group>
 </template>
 
 <script>
 export default {
-    props : ['propsdata'],
     methods : {
         removeTodo : function(todoItem, index){
-            this.$emit('removeItem', todoItem, index);
+            this.$store.commit('removeOneItem', {todoItem, index})
+            // this.$emit('removeItem', todoItem, index);
         },
         checkTodo : function(todoItem, index){
-            this.$emit('checkItem', todoItem, index)
+            this.$store.commit('checkOneItem', {todoItem, index})
+            // this.$emit('checkItem', todoItem, index)
         }
     }
 }
@@ -58,11 +59,10 @@ li {
     color : #de4343;
 }
 
-/* 리스트 아이템 트렌지션 효과 */
 .list-enter-active, .list-leave-active {
   transition: all 1s;
 }
-.list-enter, .list-leave-to {
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
   opacity: 0;
   transform: translateY(30px);
 }
