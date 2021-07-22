@@ -1,9 +1,9 @@
 <template>
   <transition-group name="list" tag="p">
-    <li v-for="(todoItem,index) in this.$store.state.todoItems" v-bind:key="todoItem.item">
-    <i class="checkBtn fas fa-check" v-on:click="checkTodo(todoItem,index)" v-bind:class="{checkBtnCompleted : todoItem.completed}"></i>
+    <li v-for="(todoItem,index) in this.storedTodoItems" v-bind:key="todoItem.item">
+    <i class="checkBtn fas fa-check" v-on:click="checkTodo({todoItem,index})" v-bind:class="{checkBtnCompleted : todoItem.completed}"></i>
     <span v-bind:class="{textCompleted : todoItem.completed}">{{ todoItem.item }}</span>
-    <span class="removeBtn" v-on:click="removeTodo(todoItem,index)">
+    <span class="removeBtn" v-on:click="removeTodo({todoItem,index})">
         <i class="far fa-trash-alt"></i>
     </span>
     </li>
@@ -11,16 +11,28 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
     methods : {
-        removeTodo : function(todoItem, index){
-            this.$store.commit('removeOneItem', {todoItem, index})
-            // this.$emit('removeItem', todoItem, index);
-        },
-        checkTodo : function(todoItem, index){
-            this.$store.commit('checkOneItem', {todoItem, index})
-            // this.$emit('checkItem', todoItem, index)
-        }
+        ...mapMutations({
+            removeTodo : 'removeOneItem', 
+            checkTodo : 'checkOneItem'
+            //!!인자는 따로 안 넘겨줘도 된다!! 
+            // 다만, vuex를 쓸 때는 template단에서 인자를 두 개 보내주고, store.js에 보낼 때는 하나로 묶었으므로 헬퍼 쓸 때는 template인자를 하나로 묶어줘야한다.
+        }),
+        // removeTodo : function(todoItem, index){
+
+        //     this.$store.commit('removeOneItem', {todoItem, index})
+        //     // this.$emit('removeItem', todoItem, index);
+        // },
+        // checkTodo : function(todoItem, index){
+        //     this.$store.commit('checkOneItem', {todoItem, index})
+        //     // this.$emit('checkItem', todoItem, index)
+        // }
+    },
+    computed : {
+       ...mapGetters(['storedTodoItems'])
     }
 }
 </script>
